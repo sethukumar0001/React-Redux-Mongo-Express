@@ -1,0 +1,82 @@
+.register-button{
+    margin-bottom:2rem
+}
+.register{
+    margin-left: 40%
+}
+.radio-container{
+    border-radius:35px;
+    border:1px solid grey;
+    padding: 15px ;
+    box-shadow: 2px 2px 2px 2px #888888
+}
+
+
+.radio {
+  margin: 0 10px 0 10px !important;
+}
+.label {
+  margin-left: 1px !important;
+}
+/* .images{
+  margin-top:10px
+} */
+
+input[type='text'] {
+ 
+  
+
+    font-size: 16px;
+    margin-bottom: 20px;
+    padding: 1%;
+    border: none;
+   
+    
+    border-radius: 30px;
+    box-shadow: 2px 2px 2px 2px  #888888
+  }
+  
+  input[type='password'] {
+  
+    font-size: 16px;
+    margin-bottom: 2sethu0px;
+    border: none;
+    padding: 1%;
+    /* padding:15px 15px 15px 1opx; */
+  
+    border-radius: 30px;
+    box-shadow: 2px 2px 2px 2px  #888888
+  
+  }
+
+  
+  input[type='submit'] {
+   
+    
+    color: #fff;
+    font-size: 20px;
+
+    border: none;
+  
+    border-radius: 30px
+  }
+  button[type='submit'] {
+   
+    
+    color: rgb(146, 112, 112);
+    font-size: 20px;
+    margin-left: 6%;
+    margin-top: 5%;
+  
+    border: none;
+  
+    border-radius: 30px
+  }
+  
+  .check {
+    font-size: 16px;
+  }
+  .sethu{
+    color:red;
+    padding-top: 100px !important;
+   }
