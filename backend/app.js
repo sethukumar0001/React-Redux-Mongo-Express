@@ -12,16 +12,6 @@ var Auth = require('./routes/users');
 
 var app = express();
 
-// DB Config
-// const db = require("./bin/Db")
-
-var MongoClient = require('mongodb').MongoClient
-
-MongoClient.connect('mongodb://localhost:27017/lovely',{ useNewUrlParser: true }, function (err, db) {
-  if (err) throw err;
-  else console.log("***Connected to MongoServer***");
-  })
-
 // Passport middleware
 app.use(passport.initialize());
 

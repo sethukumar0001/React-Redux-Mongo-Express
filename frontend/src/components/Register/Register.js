@@ -1,10 +1,12 @@
 import React, { Component } from "react";
-// import { Link } from "react-router-dom";
+import { Link,withRouter } from "react-router-dom";
 import "./Register.css";
-import {registerUser} from '../../Redux/Actions/actionCreators';
-import {connect} from 'react-redux';
+import { registerUser, setCurrentUser, logoutUser } from "../../Redux/Actions/actionCreators";
+import { connect } from "react-redux";
 
- class Register extends Component {
+
+
+class Register extends Component {
   constructor(props) {
     super(props);
 
@@ -21,52 +23,49 @@ import {connect} from 'react-redux';
 
   handleSubmit = async e => {
     e.preventDefault();
-    console.log(this.state);
-    console.log("dfgfdgfdgdf")
-    // var user = {
-    //   firstname : this.state.firstname,
-    //   lastname :this.state.lastname,
-    //   email :this.state.email,
-    //   mobilenumber : this.state.mobilenumber,
-    //   password :this.state.password
-    // }
-    // this.props.registerUser(   this.state.firstname,
-    //  this.state.lastname,
-    // this.state.email,
-    // this.state.mobilenumber,
-    // this.state.password)
-   
-    // const data = this.state
-    // axios.post('http://localhost:5000/add',data)
-    //     .then((result) => {
-    //         console.log(result)
-//     })
-const data = this.state
-const response = await fetch('http://localhost:4000/auth/register', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify(	this.state ),
-});
-const body = await response.text();	
-this.setState({ response: body });
-console.log(data);
-
-
+    // console.log(this.state);
+    // console.log("dfgfdgfdgdf");
+    // const data = this.state;
+    // const response = await fetch("http://localhost:4000/auth/register", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json"
+    //   },
+    //   body: JSON.stringify(this.state)
+    // });
+    // const body = await response.text();
+    // this.setState({ response: body });
+    // console.log(data);
+    const newUser={
+      firstname:this.state.firstname,
+      lastname:this.state.lastname,
+      mobilenumber:this.state.mobilenumber,
+      email:this.state.email,
+      password:this.state.password
+    }
+    this.props.registerUser(newUser,this.props.history)
   };
+
+  componentDidMount() {
+    // If logged in and user navigates to Register page, should redirect them to dashboard
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push("/home");
+    }
+  }
 
   render() {
     console.log(this.state.response);
     return (
       <div className="register">
-        <div className="sethu">
+         <div className="sethu">
           <div className="container ">
             <div className="row ml-3 ">
+            <h2>Register</h2>
               <div className="col-lg-6">
+                
                 <form onSubmit={this.handleSubmit}>
                   <div className="form-inline">
-                    <input
+                <div>FirstName:</div>    <input
                       type="text"
                       placeholder="First Name"
                       name="firstname"
@@ -78,7 +77,7 @@ console.log(data);
                     />
                   </div>
                   <div>
-                    <input
+                   <div> lastName:</div> <input
                       type="text"
                       placeholder="Last Name"
                       name="lastname"
@@ -91,7 +90,7 @@ console.log(data);
                   </div>
 
                   <div className="form-inline">
-                    <input
+                   <div> Number: </div><input
                       type="text"
                       placeholder="Mobile No."
                       name="email"
@@ -103,7 +102,7 @@ console.log(data);
                     />
                   </div>
                   <div>
-                    <input
+                  <div> Email:</div> <input
                       type="text"
                       placeholder="Email"
                       name="email"
@@ -114,7 +113,7 @@ console.log(data);
                   </div>
 
                   <div className="form-inline">
-                    <input
+                    <div>Password:</div><input
                       type="password"
                       placeholder="Password"
                       name="password"
@@ -130,6 +129,9 @@ console.log(data);
                     Sign Up
                   </button>
                 </form>
+                <p>Already Registered</p>
+                <Link to="/"className="nav-link " >Login</Link> 
+
               </div>
               <div className="col-lg-6"></div>
             </div>
@@ -139,4 +141,7 @@ console.log(data);
     );
   }
 }
-export default connect(null,{registerUser})(Register)
+export default connect(
+  null,
+  { registerUser }
+)(withRouter(Register));
