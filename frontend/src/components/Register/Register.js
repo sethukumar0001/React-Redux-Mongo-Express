@@ -1,147 +1,164 @@
 import React, { Component } from "react";
-import { Link,withRouter } from "react-router-dom";
-import "./Register.css";
-import { registerUser, setCurrentUser, logoutUser } from "../../Redux/Actions/actionCreators";
+import { Link, withRouter } from "react-router-dom";
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
-
-
+import { registerUser } from "../../Redux/Actions/actionCreators";
+import classnames from "classnames";
 
 class Register extends Component {
-  constructor(props) {
-    super(props);
-
+  constructor() {
+    super();
     this.state = {
-      firstname: "",
-      lastname: "",
+      name: "",
       email: "",
-      mobilenumber: "",
-      password: ""
+      password: "",
+      password2: "",
+      errors: {}
     };
-
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
-
-  handleSubmit = async e => {
-    e.preventDefault();
-    // console.log(this.state);
-    // console.log("dfgfdgfdgdf");
-    // const data = this.state;
-    // const response = await fetch("http://localhost:4000/auth/register", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json"
-    //   },
-    //   body: JSON.stringify(this.state)
-    // });
-    // const body = await response.text();
-    // this.setState({ response: body });
-    // console.log(data);
-    const newUser={
-      firstname:this.state.firstname,
-      lastname:this.state.lastname,
-      mobilenumber:this.state.mobilenumber,
-      email:this.state.email,
-      password:this.state.password
-    }
-    this.props.registerUser(newUser,this.props.history)
-  };
 
   componentDidMount() {
     // If logged in and user navigates to Register page, should redirect them to dashboard
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/home");
+      this.props.history.push("/dashboard");
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({
+        errors: nextProps.errors
+      });
+    }
+  }
+
+  onChange = e => {
+    this.setState({ [e.target.id]: e.target.value });
+  };
+
+  onSubmit = e => {
+    e.preventDefault();
+
+    const newUser = {
+      name: this.state.name,
+      email: this.state.email,
+      password: this.state.password,
+      password2: this.state.password2
+    };
+
+    this.props.registerUser(newUser, this.props.history);
+  };
+
   render() {
-    console.log(this.state.response);
+    const { errors } = this.state;
+
     return (
-      <div className="register">
-         <div className="sethu">
-          <div className="container ">
-            <div className="row ml-3 ">
-            <h2>Register</h2>
-              <div className="col-lg-6">
-                
-                <form onSubmit={this.handleSubmit}>
-                  <div className="form-inline">
-                <div>FirstName:</div>    <input
-                      type="text"
-                      placeholder="First Name"
-                      name="firstname"
-                      value={this.state.firstname}
-                      onChange={e =>
-                        this.setState({ firstname: e.target.value })
-                      }
-                      className="mr-3 form-control"
-                    />
-                  </div>
-                  <div>
-                   <div> lastName:</div> <input
-                      type="text"
-                      placeholder="Last Name"
-                      name="lastname"
-                      value={this.state.lastname}
-                      onChange={e =>
-                        this.setState({ lastname: e.target.value })
-                      }
-                      className="form-control"
-                    />
-                  </div>
-
-                  <div className="form-inline">
-                   <div> Number: </div><input
-                      type="text"
-                      placeholder="Mobile No."
-                      name="email"
-                      value={this.state.mobilenumber}
-                      onChange={e =>
-                        this.setState({ mobilenumber: e.target.value })
-                      }
-                      className="mr-3 form-control"
-                    />
-                  </div>
-                  <div>
-                  <div> Email:</div> <input
-                      type="text"
-                      placeholder="Email"
-                      name="email"
-                      value={this.state.email}
-                      onChange={e => this.setState({ email: e.target.value })}
-                      className="mr-3 mb-3 form-control"
-                    />
-                  </div>
-
-                  <div className="form-inline">
-                    <div>Password:</div><input
-                      type="password"
-                      placeholder="Password"
-                      name="password"
-                      value={this.state.password}
-                      onChange={e =>
-                        this.setState({ password: e.target.value })
-                      }
-                      className="mr-3 mb-3 form-control"
-                    />
-                  </div>
-
-                  <button type="submit" value="Signup">
-                    Sign Up
-                  </button>
-                </form>
-                <p>Already Registered</p>
-                <Link to="/"className="nav-link " >Login</Link> 
-
-              </div>
-              <div className="col-lg-6"></div>
+      <div className="container">
+        <div className="row">
+          <div className="col s8 offset-s2">
+            <Link to="/" className="btn-flat waves-effect">
+              <i className="material-icons left">keyboard_backspace</i> Back to
+              home
+            </Link>
+            <div className="col s12" style={{ paddingLeft: "11.250px" }}>
+              <h4>
+                <b>Register</b> below
+              </h4>
+              <p className="grey-text text-darken-1">
+                Already have an account? <Link to="/login">Log in</Link>
+              </p>
             </div>
+            <form noValidate onSubmit={this.onSubmit}>
+              <div className="input-field col s12">
+                <input
+                  onChange={this.onChange}
+                  value={this.state.name}
+                  error={errors.name}
+                  id="name"
+                  type="text"
+                  className={classnames("", {
+                    invalid: errors.name
+                  })}
+                />
+                <label htmlFor="name">Name</label>
+                <span className="red-text">{errors.name}</span>
+              </div>
+              <div className="input-field col s12">
+                <input
+                  onChange={this.onChange}
+                  value={this.state.email}
+                  error={errors.email}
+                  id="email"
+                  type="email"
+                  className={classnames("", {
+                    invalid: errors.email
+                  })}
+                />
+                <label htmlFor="email">Email</label>
+                <span className="red-text">{errors.email}</span>
+              </div>
+              <div className="input-field col s12">
+                <input
+                  onChange={this.onChange}
+                  value={this.state.password}
+                  error={errors.password}
+                  id="password"
+                  type="password"
+                  className={classnames("", {
+                    invalid: errors.password
+                  })}
+                />
+                <label htmlFor="password">Password</label>
+                <span className="red-text">{errors.password}</span>
+              </div>
+              <div className="input-field col s12">
+                <input
+                  onChange={this.onChange}
+                  value={this.state.password2}
+                  error={errors.password2}
+                  id="password2"
+                  type="password"
+                  className={classnames("", {
+                    invalid: errors.password2
+                  })}
+                />
+                <label htmlFor="password2">Confirm Password</label>
+                <span className="red-text">{errors.password2}</span>
+              </div>
+              <div className="col s12" style={{ paddingLeft: "11.250px" }}>
+                <button
+                  style={{
+                    width: "150px",
+                    borderRadius: "3px",
+                    letterSpacing: "1.5px",
+                    marginTop: "1rem"
+                  }}
+                  type="submit"
+                  className="btn btn-large waves-effect waves-light hoverable blue accent-3"
+                >
+                  Sign up
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
     );
   }
 }
+
+Register.propTypes = {
+  registerUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors
+});
+
 export default connect(
-  null,
+  mapStateToProps,
   { registerUser }
 )(withRouter(Register));

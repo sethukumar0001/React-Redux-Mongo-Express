@@ -13,6 +13,9 @@ import store from './Redux/store/store';
 import jwt_decode from "jwt-decode";
 import setAuthToken from './Redux/utils/setAuthToken';
 import {setCurrentUser,logoutUser} from './Redux/Actions/actionCreators';
+import Landing from './components/Layout/landing';
+import Dashboard from './components/Dashboard/dashboard';
+import PrivateRoute from './components/Private_Route/PrivateRoute'
 
 // Check for token to keep user logged in
 if (localStorage.jwtToken) {
@@ -43,9 +46,13 @@ function App() {
       <Provider store ={store}>
               <Router>
         <Switch>
+          <Route exact path="/" component={Landing} />
           <Route exact path="/register" component={Register}></Route>
-          <Route exact path="/" component={Login}></Route>
+          <Route exact path="/login" component={Login}></Route>
           <Route path="/home" component ={Home}></Route>
+          <Switch>
+              <PrivateRoute exact path="/dashboard" component={Dashboard} />
+            </Switch>
         </Switch>
       </Router>
       </Provider>

@@ -1,93 +1,142 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-// import "./Register.css";
-import { loginUser } from "../../Redux/Actions/actionCreators";
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { loginUser } from "../../Redux/Actions/actionCreators";
+import classnames from "classnames";
 
 class Login extends Component {
-  constructor(props) {
-    super(props);
-
+  constructor() {
+    super();
     this.state = {
       email: "",
-      password: ""
+      password: "",
+      errors: {}
     };
-
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit = async e => {
-    e.preventDefault();
-    console.log(this.state);
-    console.log("dfgfdgfdgdf");
-    const data = this.state;
-    const response = await fetch("http://localhost:4000/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(this.state)
-    });
-    const body = await response.text();
-    this.setState({ response: body });
-    console.log(data);
-    if (body) {
-      this.props.history.push("/home");
+  componentDidMount() {
+    // If logged in and user navigates to Login page, should redirect them to dashboard
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push("/dashboard");
     }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.auth.isAuthenticated) {
+      this.props.history.push("/dashboard");
+    }
+
+    if (nextProps.errors) {
+      this.setState({
+        errors: nextProps.errors
+      });
+    }
+  }
+
+  onChange = e => {
+    this.setState({ [e.target.id]: e.target.value });
+  };
+
+  onSubmit = e => {
+    e.preventDefault();
+
+    const userData = {
+      email: this.state.email,
+      password: this.state.password
+    };
+
+    this.props.loginUser(userData);
   };
 
   render() {
-    console.log(this.state.response);
+    const { errors } = this.state;
+
     return (
-      <div className="register">
-        <div className="sethu">
-          <div className="container ">
-            <div className="row ml-3 ">
-              <h2>Login</h2>
-              <div className="col-lg-6">
-                <form onSubmit={this.handleSubmit}>
-                  <div>
-                    <div> Email:</div>{" "}
-                    <input
-                      type="text"
-                      placeholder="Email"
-                      name="email"
-                      value={this.state.email}
-                      onChange={e => this.setState({ email: e.target.value })}
-                      className="mr-3 mb-3 form-control"
-                    />
-                  </div>
-                  <div className="form-inline">
-                    <div>Password:</div>
-                    <input
-                      type="password"
-                      placeholder="Password"
-                      name="password"
-                      value={this.state.password}
-                      onChange={e =>
-                        this.setState({ password: e.target.value })
-                      }
-                      className="mr-3 mb-3 form-control"
-                    />
-                  </div>
-                  <button type="submit" value="Signup">
-                    Sign In
-                  </button>
-                </form>
-                <p>Already login</p>
-                <Link to="/register" className="nav-link ">
-                  Register
-                </Link>
-              </div>
-              <div className="col-lg-6"></div>
+      <div className="container">
+        <div style={{ marginTop: "4rem" }} className="row">
+          <div className="col s8 offset-s2">
+            <Link to="/" className="btn-flat waves-effect">
+              <i className="material-icons left">keyboard_backspace</i> Back to
+              home
+            </Link>
+            <div className="col s12" style={{ paddingLeft: "11.250px" }}>
+              <h4>
+                <b>Login</b> below
+              </h4>
+              <p className="grey-text text-darken-1">
+                Don't have an account? <Link to="/register">Register</Link>
+              </p>
             </div>
+            <form noValidate onSubmit={this.onSubmit}>
+              <div className="input-field col s12">
+                <input
+                  onChange={this.onChange}
+                  value={this.state.email}
+                  error={errors.email}
+                  id="email"
+                  type="email"
+                  className={classnames("", {
+                    invalid: errors.email || errors.emailnotfound
+                  })}
+                />
+                <label htmlFor="email">Email</label>
+                <span className="red-text">
+                  {errors.email}
+                  {errors.emailnotfound}
+                </span>
+              </div>
+              <div className="input-field col s12">
+                <input
+                  onChange={this.onChange}
+                  value={this.state.password}
+                  error={errors.password}
+                  id="password"
+                  type="password"
+                  className={classnames("", {
+                    invalid: errors.password || errors.passwordincorrect
+                  })}
+                />
+                <label htmlFor="password">Password</label>
+                <span className="red-text">
+                  {errors.password}
+                  {errors.passwordincorrect}
+                </span>
+              </div>
+              <div className="col s12" style={{ paddingLeft: "11.250px" }}>
+                <button
+                  style={{
+                    width: "150px",
+                    borderRadius: "3px",
+                    letterSpacing: "1.5px",
+                    marginTop: "1rem"
+                  }}
+                  type="submit"
+                  className="btn btn-large waves-effect waves-light hoverable blue accent-3"
+                >
+                  Login
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
     );
   }
 }
+
+Login.propTypes = {
+  loginUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors
+});
+
 export default connect(
-  null,
+  mapStateToProps,
   { loginUser }
 )(Login);
