@@ -7,10 +7,6 @@ class Landing extends Component {
       <div style={{ height: "75vh" }} className="container valign-wrapper">
         <div className="row">
           <div className="col s12 center-align">
-            <h4>
-              <b>Welcome To</b> My Website{" "}
-              <span style={{ fontFamily: "monospace" }}>@sethu</span> 
-            </h4>
       
             <br />
             <div className="col s6">
@@ -21,7 +17,7 @@ class Landing extends Component {
                   borderRadius: "3px",
                   letterSpacing: "1.5px"
                 }}
-                className="btn btn-large waves-effect waves-light hoverable blue accent-3"
+                className="btn btn-large btn-flat waves-effect white black-text"
               >
                 Register
               </Link>

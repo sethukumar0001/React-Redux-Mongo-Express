@@ -15,7 +15,8 @@ import setAuthToken from './Redux/utils/setAuthToken';
 import {setCurrentUser,logoutUser} from './Redux/Actions/actionCreators';
 import Landing from './components/Layout/landing';
 import Dashboard from './components/Dashboard/dashboard';
-import PrivateRoute from './components/Private_Route/PrivateRoute'
+import PrivateRoute from './components/Private_Route/PrivateRoute';
+// import Header from '../src/components/Header/Header'
 
 // Check for token to keep user logged in
 if (localStorage.jwtToken) {
