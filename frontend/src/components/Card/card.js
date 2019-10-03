@@ -1,64 +1,73 @@
-import React,{useEffect} from 'react';
+import React,{Component} from 'react';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import './card.css'
+import {addDataCreator} from '../../Redux/Actions/actionCreators'
+import {ADD_DATA} from '../../Redux/Actions/type'
+import {connect} from 'react-redux';  
 
 
-export default function SimpleCard() {
-
-  useEffect(() => {
-
-    fetch(`${MAIN_URL}/getData`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        userId: localStorage.getItem("UserId")
-      })
-    })
-      .then(response => response.json())
-      .then(function (body) {
-        console.log(body)
-        // if (body[0].status !== "failed") {
-          if (body.data !== "null" ) {
-          setDashboardData(body.data);
-          }
-
-
-      });
-
-
-
-  }, []);
-
-
-  const userCount = applicants.map(each => {
-    return each.length;
-  });
-
+class SimpleCard extends Component {
+  constructor(props){
+    super(props);
+    this.state={
+      email:'',
+      password:''
+    }
+  }
+  handleSubmit = (e)=>{
+    e.preventDefault();
+    // this.props.dispatch({type:ADD_DATA})
+   this.props.dispatch(addDataCreator(this.state));    
+  }
+render(){
+ 
     
   return (
     <Card className="card" >
       <CardContent>
-        <Typography color="textSecondary" gutterBottom>
-         Header
-        </Typography>
-      
-        <Typography color="textSecondary">
+      <form  onSubmit={this.handleSubmit.bind(this)} > {/* form tag started &  column class for  input groups */}
+ 
+ <div className="name">
+<input type="text"
+            placeholder="Username"
+            value={this.state.email}
+            onChange={e=>this.setState({email:e.target.value})}
+            name="email"
+className="mb-3 mr-3  form-control "
+          />
+</div>
+<div className="password">
+          <input
+            type="password"
+            placeholder="Password"
+            value={this.state.password}
+            onChange={e=>this.setState({password:e.target.value})}
+            name="password"
+            className="mb-3 mr-3 form-control"
+          />
+          
+          </div>
         
-        </Typography>
-        <Typography component="p">
-        
-        </Typography>
+       <center><input type="submit" value="Submit"  className="bg-primary mb-3 mr-3 "/></center>
+
+      </form>
       </CardContent>
-      <CardActions>
-        <Button size="small">Button...</Button>
-      </CardActions>
+     
     </Card>
   );
 }
+
+}
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    dispatch1: () => {
+      dispatch(addDataCreator)
+    }
+  }
+}
+export default connect(mapDispatchToProps)(SimpleCard)
+

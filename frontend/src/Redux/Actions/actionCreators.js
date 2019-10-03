@@ -2,7 +2,7 @@ import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
 
-import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING } from "./type";
+import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING,ADD_DATA } from "./type";
 
 // Register User
 export const registerUser = (userData, history) => dispatch => {
@@ -16,6 +16,14 @@ export const registerUser = (userData, history) => dispatch => {
       })
     );
 };
+
+export const addDataCreator =(data)=>{
+  console.log(data);
+  return{
+     type:ADD_DATA,
+     data
+  }
+  }
 
 // Login - get user token
 export const loginUser = userData => dispatch => {
