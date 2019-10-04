@@ -10,7 +10,8 @@ class Header extends Component {
 
     render() {
         return (
-<div className="navbar">   <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">   <button
+<div className="navbar"> 
+  <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">   <button
               style={{
                 width: "150px",
                 borderRadius: "3px",
@@ -23,7 +24,8 @@ class Header extends Component {
             >
               Logout
             </button>
-</Navbar></div>
+</Navbar>
+</div>
         )
     }
 }

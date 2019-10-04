@@ -6,7 +6,6 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import './card.css'
 import {addDataCreator} from '../../Redux/Actions/actionCreators'
-import {ADD_DATA} from '../../Redux/Actions/type'
 import {connect} from 'react-redux';  
 
 
@@ -62,12 +61,6 @@ className="mb-3 mr-3  form-control "
 }
 
 }
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    dispatch1: () => {
-      dispatch(addDataCreator)
-    }
-  }
-}
-export default connect(mapDispatchToProps)(SimpleCard)
+
+export default connect(null)(SimpleCard)
 
