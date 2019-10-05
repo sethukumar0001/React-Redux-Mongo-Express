@@ -1,11 +1,23 @@
 import React, { Component } from "react";
 // import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { logoutUser } from "../../Redux/Actions/actionCreators";
+import { logoutUser, setUserLoading } from "../../Redux/Actions/actionCreators";
 import SimpleCard from '../Card/card';
 import Header from '../Header/Header';
+import Display from '../displayStore/displayStoreData';
+// import AddDataReducer from '../../Redux/Reducers/addDataReducer'
+import addDataReducer from "../../Redux/Reducers/addDataReducer";
+import store from '../../Redux/store/store'
+
 
 class Dashboard extends Component {
+  constructor(props){
+    super(props);
+    this.state={
+      data:[]
+    }
+
+  }
   onLogoutClick = e => {
     e.preventDefault();
     this.props.logoutUser();
@@ -13,6 +25,16 @@ class Dashboard extends Component {
   
 
   render() {
+    store.subscribe(() => {
+      // When state will be updated(in our case, when items will be fetched), 
+      // we will update local component state and force component to rerender 
+      // with new data.
+
+      this.setState({
+        data: store.getState().addData.data.data
+      });
+    });
+    console.log(this.state.data)
 
     return (
       <div>
@@ -33,6 +55,9 @@ class Dashboard extends Component {
             </button>
       <div>
       <SimpleCard />
+      <Display />
+      
+      
       </div>
       </div>   
     );
@@ -40,11 +65,9 @@ class Dashboard extends Component {
 }
 
 
-const mapStateToProps = state =>{
-  return{
-    addData :state.addData.data
-  }
-  }
+const mapStateToProps = state =>({
+addDataReducer:state.addDataReducer
+  })
 
 export default connect(
   mapStateToProps,

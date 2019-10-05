@@ -1,6 +1,6 @@
 import { ADD_DATA } from "../Actions/type";
 
-export default function(state = [], action) {
+const addDataReducer = (state = [], action) => {
     console.log(action.data)
   switch (action.type) {
     case ADD_DATA:
@@ -12,3 +12,5 @@ export default function(state = [], action) {
       return state;
   }
 }
+export default addDataReducer; 
+
